@@ -3,6 +3,10 @@ import { getMovies } from '../services/fakeMovieService';
 import Like from './common/like';
 import Pagination from './common/pagination';
 import { paginate } from '../utils/paginate';
+
+
+//in order to have type checking in React, need to install yarn add prop-types@15.6.2 through
+//Rosetta terminal.  Then go to pagination.jsx and use the import statement and prop type checking.
 class Movies extends Component {
     state = {
         movies: getMovies(),

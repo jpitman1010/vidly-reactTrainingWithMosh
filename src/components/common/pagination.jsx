@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 
 //to use lodash open terminal and nmp i lodash@4.17.10 - or yarn add using Rosetta
 //lodash is a popular version of an optimized JS library called underscore
@@ -32,9 +33,12 @@ const Pagination = (props) => {
             </ul>
         </nav>
     )};
+
+Pagination.propTypes = {
+    itemsCount: PropTypes.number.isRequired, 
+    pageSize: PropTypes.number.isRequired, 
+    currentPage: PropTypes.number.isRequired, 
+    onPageChange: PropTypes.func.isRequired
+}
  
 export default Pagination;
-
-
-
-
