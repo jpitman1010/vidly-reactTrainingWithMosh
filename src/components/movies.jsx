@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { getMovies, deleteMovie, getMovie } from '../services/fakeMovieService';
+import { getMovies } from '../services/fakeMovieService';
 import Like from './common/like';
 import Pagination from './common/pagination';
 import { paginate } from '../utils/paginate';
@@ -32,7 +32,6 @@ class Movies extends Component {
         //it will bring you to this method;
         console.log('page =', page);
         this.setState({ currentPage: page });
-
     }
     
         //when destructuring the movies from state in the render, because we are calling
@@ -64,7 +63,7 @@ class Movies extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.movies.map(movie => (
+                        {movies.map(movie => (
                             <tr key={movie._id}>
                                 <td>{movie.title}</td>
                                 <td>{movie.genre.name}</td>

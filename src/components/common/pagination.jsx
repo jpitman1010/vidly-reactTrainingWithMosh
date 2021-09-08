@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import _ from 'lodash';
 
 //to use lodash open terminal and nmp i lodash@4.17.10 - or yarn add using Rosetta
 //lodash is a popular version of an optimized JS library called underscore
 //so underscore is often used for import statement above, but can call it whatever (*, l, lodash, etc...)
-//
 
 const Pagination = (props) => {
     const { itemsCount, pageSize, currentPage, onPageChange } = props;
