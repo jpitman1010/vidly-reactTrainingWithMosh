@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { getMovies, deleteMovie, getMovie } from '../services/fakeMovieService';
 import Like from './common/like';
-
+import Pagination from './common/pagination';
+import { paginate } from '../utils/paginate';
 class Movies extends Component {
     state = {
-        movies: getMovies()
+        movies: getMovies(),
+        currentPage: 1,
+        pageSize: 4
  
     };
 
@@ -24,11 +27,28 @@ class Movies extends Component {
         this.setState({ movies });
     };
 
+    handlePageChange = page => {
+        //to quickly navigate to a method, use command+p @handlePageChange and 
+        //it will bring you to this method;
+        console.log('page =', page);
+        this.setState({ currentPage: page });
+
+    }
+    
+        //when destructuring the movies from state in the render, because we are calling
+        //a const movies below, it gives an error, since the const movies is referring
+        //to a list of currently displayed movies we will leave that the same and
+        //rename the movies in state by destructuring using movies: allMovies
+        //because it is more clear and allows you to not do excessive things to 
+        //chnage state name for movies
   render() {
         const { length: moviesCount } = this.state.movies;
-
+        const { pageSize, currentPage, movies: allMovies } = this.state;
+        
         if (moviesCount === 0) return <p>There are no movies in the database.</p>;
-            
+        
+        const movies = paginate(allMovies, currentPage, pageSize);
+
         return (
             <React.Fragment><
                 p>Showing {moviesCount} movies in the database.</p>
@@ -44,7 +64,7 @@ class Movies extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        { this.state.movies.map(movie => (
+                        {this.state.movies.map(movie => (
                             <tr key={movie._id}>
                                 <td>{movie.title}</td>
                                 <td>{movie.genre.name}</td>
@@ -59,9 +79,16 @@ class Movies extends Component {
                                     </button>
                                 </td>
                             </tr> 
-                        ))};
+                            )
+                        )}
                     </tbody>
                 </table>  
+                <Pagination 
+                    itemsCount={moviesCount} 
+                    pageSize={pageSize}
+                    currentPage={currentPage}
+                    onPageChange={this.handlePageChange}
+                />
             </React.Fragment>
             )};
         }
