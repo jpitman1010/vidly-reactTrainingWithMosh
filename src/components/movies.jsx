@@ -18,7 +18,8 @@ class Movies extends Component {
     };
 
     componentDidMount() {
-        this.setState({ movies: getMovies(), genres: getGenres() });
+        const genres = [{ name: 'All Genres' },...getGenres()];
+        this.setState({ movies: getMovies(), genres });
     }
 
     handleDelete = movie => {
@@ -47,7 +48,11 @@ class Movies extends Component {
 
     handleGenreSelection = genre => {    
         console.log(genre);
-        this.setState({ selectedGenre: genre })
+        this.setState({ selectedGenre: genre, currentPage: 1 });
+        //just reset current page to 1 otherwise if you go to 
+        //2nd page on all movies and use one of the other genre filters
+        //it will show nothing because it will only look at the second page
+        //to see if a movie in that genre exists.
     };
 
 
@@ -59,7 +64,7 @@ class Movies extends Component {
     
         if (moviesCount === 0) return <p>There are no movies in the database.</p>;
         
-        const filtered = selectedGenre ? 
+        const filtered = selectedGenre && selectedGenre._id ?
             allMovies.filter(m => m.genre._id === selectedGenre._id) 
             : allMovies;
         const movies = paginate(filtered, currentPage, pageSize);
