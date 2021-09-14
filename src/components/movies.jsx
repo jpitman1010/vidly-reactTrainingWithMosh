@@ -5,6 +5,7 @@ import { paginate } from '../utils/paginate';
 import { genres, getGenres } from '../services/fakeGenreService';
 import ListGroup from './common/listgroup';
 import MoviesTable from './moviesTable';
+import _ from 'lodash';
 //in order to have type checking in React, need to install yarn add prop-types@15.6.2 through
 //Rosetta terminal.  Then go to pagination.jsx and use the import statement and prop type checking.
 class Movies extends Component {
@@ -13,7 +14,8 @@ class Movies extends Component {
         genres: [],
         currentPage: 1,
         pageSize: 4,
-        selectGenres: 'allMovies' 
+        selectGenres: 'allMovies',
+        sortColumn: {path: 'title', order: 'asc'} 
     };
 
     componentDidMount() {
@@ -56,12 +58,27 @@ class Movies extends Component {
 
     handleSort = path => {
         console.log(path);
+        const sortColumn = {...this.state.sortColumn};
+        if (sortColumn.path === path)
+            sortColumn.order = (sortColumn.order === 'asc') ? 'desc' : 'asc';
+        else {
+            sortColumn.path = path;
+            sortColumn.order = 'asc';
+        }
+        this.setState({ sortColumn });
     }
 
     
   render() {
         const { length: moviesCount } = this.state.movies;
-        const { pageSize, currentPage,selectedGenre, movies: allMovies, genres } = this.state;
+        const { 
+            pageSize, 
+            currentPage, 
+            sortColumn,
+            selectedGenre, 
+            movies: allMovies, 
+            genres,
+        } = this.state;
 
     
         if (moviesCount === 0) return <p>There are no movies in the database.</p>;
@@ -69,7 +86,10 @@ class Movies extends Component {
         const filtered = selectedGenre && selectedGenre._id ?
             allMovies.filter(m => m.genre._id === selectedGenre._id) 
             : allMovies;
-        const movies = paginate(filtered, currentPage, pageSize);
+
+        const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
+
+        const movies = paginate(sorted, currentPage, pageSize);
         
 
         return (
